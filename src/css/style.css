@@ -1,0 +1,46 @@
+@import 'reset';
+@import 'fonts';
+
+.conteiner {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nickname {
+  padding: 40px;
+  font-family: 'Fractal', open-sans;
+  border: solid 1px rgb(224, 152, 70);
+  border-radius: 20px;
+  text-align: center;
+
+}
+
+.nickname__title {
+  font-size: 21px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.nickname__form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.nickname__input {
+  border-radius: 10px;
+  font-size: 18px;
+  padding: 5px;
+  border: solid 1px rgb(179, 117, 26);
+}
+
+.nickname__button {
+  font-size: 18px;
+  border-radius: 10px;
+  align-self: center;
+  margin-top: 5px;
+  padding: 8px;
+  max-width: 50%;
+}
