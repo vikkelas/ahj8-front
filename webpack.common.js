@@ -23,11 +23,6 @@ module.exports = {
         }, ],
       },
       {
-        test: /\.(?:ico|png|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-
-      },
-      {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader, 'css-loader',
@@ -38,8 +33,11 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /\.(ttf|otf|eot|woff|woff2)$/,
-        use: ['file-loader'],
+        test: /\.(png|ttf|jpg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
       },
     ],
   },

@@ -1,4 +1,4 @@
-import changeWindow from './position';
+import SubmitPage from './SubmitPage';
 
-changeWindow();
-window.addEventListener('resize', changeWindow);
+const page = new SubmitPage();
+page.init();
