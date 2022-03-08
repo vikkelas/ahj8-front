@@ -7,7 +7,7 @@ import {
 export default class SubmitPage {
   constructor() {
     this.modal = new RenderPage();
-    this.urlWS = 'ws://chat-vikkelas.herokuapp.com/';
+    this.urlWS = 'wss://chat-vikkelas.herokuapp.com/';
     this.idUsers = null;
     this.chatModal = null;
   }
