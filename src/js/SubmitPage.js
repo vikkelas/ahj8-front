@@ -1,13 +1,15 @@
 import RenderPage from './RenderPage';
-import changeWindow from './position';
-import API from './Request';
+import {
+  changeWindow,
+  animatedUsers,
+} from './position';
 
 export default class SubmitPage {
   constructor() {
     this.modal = new RenderPage();
-    this.url = 'http://localhost:8080/newuser';
     this.urlWS = 'ws://localhost:8080';
-    this.api = new API();
+    this.idUsers = null;
+    this.chatModal = null;
   }
 
   init() {
@@ -18,40 +20,61 @@ export default class SubmitPage {
         changeWindow();
       }
     });
-    this.eventNewUser();
+    this.eventWebSocket();
   }
 
-  eventNewUser() {
+  eventWebSocket() {
     const btn = this.modal.modalWindow.querySelector('.nickname__button');
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const userName = new FormData(document.forms.nickname__form);
-      const response = await this.api.add(this.url, userName);
-      const data = await response.json();
-      if (data.length === 0) {
-        this.modal.nameError();
+    const ws = new WebSocket(this.urlWS);
+    ws.addEventListener('open', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const userName = document.querySelector('.nickname__input').value;
+        if (!/^\S.{1,15}\S$/.test(userName)) {
+          this.modal.nameError('Не больше 15 без пробелов в конце и начале');
+          return;
+        }
+        const data = {
+          type: 'add',
+          name: userName,
+        };
+        ws.send(JSON.stringify(data));
+      });
+    });
+    ws.addEventListener('message', (msg) => {
+      const data = JSON.parse(msg.data);
+      if (data.type === 'err name use') {
+        this.modal.nameError('Это имя уже занято');
       }
-      if (data.length !== 0) {
+      if (data.type === 'create account') {
+        this.idUsers = data.id;
         this.modal.deletModal();
         this.modal.createChat();
-        this.api.wsconected(this.urlWS);
+        animatedUsers();
+        const sendBtn = document.querySelector('.chat__btn-send');
+        sendBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const sendMessage = document.querySelector('.chat__text-send');
+          ws.send(JSON.stringify({
+            type: 'new message',
+            id: this.idUsers,
+            message: sendMessage.value,
+            time: new Date().toLocaleString().slice(-8),
+          }));
+          sendMessage.value = '';
+        });
+      }
+      if (data.type === 'new conection') {
+        this.modal.renderUsers(data.data, this.idUsers);
+        this.modal.renderMesgStatus(`${data.newClient} присоединился к чату...`);
+      }
+      if (data.type === 'user disconected') {
+        this.modal.renderUsers(data.data, this.idUsers);
+        this.modal.renderMesgStatus(`${data.name} покинул чат...`);
+      }
+      if (data.type === 'new message') {
+        this.modal.renderMessage(data, this.idUsers);
       }
     });
   }
 }
-// export default function submitClient() {
-//   const btnSubbmit = document.querySelector('.nickname__button');
-//   const url = 'http://localhost:8080/newuser';
-
-//   function request(url) {
-//     return fetch(url, {
-//       body: new FormData(document.forms.nickname__form),
-//       method: 'POST',
-//     }).then((response) => response.json());
-//   }
-
-//   btnSubbmit.addEventListener('click', (e) => {
-//     e.preventDefault();
-//     const res = request(url);
-//   });
-// }

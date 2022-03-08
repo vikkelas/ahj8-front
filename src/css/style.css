@@ -62,10 +62,6 @@
 
 .chat__btn {
   display: none;
-  width: 25px;
-  cursor: pointer;
-  height: max-content;
-  align-self: center;
 }
 
 .chat__users {
@@ -127,6 +123,7 @@
 
 .message--you {
   align-self: flex-end;
+  color: rgb(177, 54, 54);
 }
 
 .message__title--you {
@@ -171,6 +168,12 @@
   justify-self: flex-end;
 }
 
+.msgStatus {
+  font-family: Play, open-sans;
+  font-size: 12px;
+  color: rgb(145, 145, 145);
+}
+
 
 @media (min-width: 375px) and (max-width: 798px) {
   .chat {
@@ -178,7 +181,13 @@
   }
 
   .chat__users {
-    display: none;
+    justify-content: flex-start;
+    transition: right 1s, opacity 0.8s, visibility 1.5s;
+    visibility: hidden;
+    opacity: 0.1;
+    top: 40vh;
+    right: 100vw;
+    flex-direction: row;
     position: absolute;
     z-index: 100;
     background-color: white;
@@ -187,15 +196,50 @@
     width: 100vw;
   }
 
+  .chat__user-conteiner {
+    margin-left: 20px;
+  }
+
+  .chat__user--active {
+    transition: right 1s, opacity 1s, visibility 1.5s;
+    visibility: visible;
+    right: 0vh;
+    opacity: 1;
+  }
+
   .chat__main {
     position: relative;
     width: 100vw;
+    height: 100vh;
+    border: none;
+    padding: 30px;
+    background-image: url(../assets/img/background-mobile.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: none;
   }
 
-  .chat__btn--close {
+  .chat__messages {
+    height: 90vh;
+  }
+
+  .chat__btn {
+    visibility: hidden;
     display: block;
+    width: 25px;
+    height: max-content;
+    align-self: center;
+  }
+
+  .chat__btn--open {
+    top: 43vh;
     position: absolute;
     bottom: 400px;
     left: 0;
   }
+
+  .chat__btn--active {
+    visibility: visible;
+  }
+
 }
